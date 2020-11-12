@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <Header :user="user"></Header>
     <column-list :list="list"></column-list>
   </div>
 </template>
@@ -7,7 +8,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import "bootstrap/dist/css/bootstrap.min.css"
-import ColumnList ,{ColumnProps}from './components/ColumnList.vue'
+import ColumnList, {ColumnProps} from './components/ColumnList.vue'
+import Header, {UserProps} from './components/Header.vue'
 const list: ColumnProps[] = [
   {
     id: 1,
@@ -40,14 +42,22 @@ const list: ColumnProps[] = [
     description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
   }
 ] 
+
+const user: UserProps = {
+  id: 0,
+  name: 'zhanghao',
+  isLogin: true
+}
 export default defineComponent({
   name: 'App',
   components: {
-    ColumnList
+    ColumnList,
+    Header
   },
   setup() {
     return {
-      list
+      list,
+      user
     }
   }
 })
