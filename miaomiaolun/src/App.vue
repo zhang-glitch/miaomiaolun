@@ -9,7 +9,7 @@
 import { defineComponent } from 'vue'
 import "bootstrap/dist/css/bootstrap.min.css"
 import ColumnList, {ColumnProps} from './components/ColumnList.vue'
-import Header, {UserProps} from './components/Header.vue'
+import Header from './components/Header.vue'
 const list: ColumnProps[] = [
   {
     id: 1,
@@ -43,7 +43,7 @@ const list: ColumnProps[] = [
   }
 ] 
 
-const user: UserProps = {
+const user = {
   id: 0,
   name: 'zhanghao',
   isLogin: true
