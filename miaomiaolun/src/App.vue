@@ -1,15 +1,41 @@
 <template>
   <div class="app">
     <Header :user="user"></Header>
+    <validate-form @form-submit="onFormSubmit">
+      <div class="form-group">
+        <label for="Email">邮箱地址</label>
+        <validate-input 
+          v-model="value" 
+          :rules="rules" 
+          placeholder="请输入邮箱地址" 
+          type="email" 
+          ref="inputRef"
+          ></validate-input>
+      </div>
+    </validate-form>
+    <p>{{value}}</p>
     <column-list :list="list"></column-list>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import "bootstrap/dist/css/bootstrap.min.css"
 import ColumnList, {ColumnProps} from './components/ColumnList.vue'
 import Header from './components/Header.vue'
+import ValidateInput, {RulesProps} from './components/ValidateInput.vue'
+import ValidateForm from './components/ValidateForm.vue'
+
+const rules: RulesProps = [
+  {
+    type: 'required',
+    message: '请输入内容'
+  },
+  {
+    type: 'email',
+    message: '请输入正确的邮箱地址'
+  }
+]
 const list: ColumnProps[] = [
   {
     id: 1,
@@ -52,12 +78,23 @@ export default defineComponent({
   name: 'App',
   components: {
     ColumnList,
-    Header
+    Header,
+    ValidateInput,
+    ValidateForm
   },
   setup() {
+    const value = ref("")
+    const inputRef = ref<any>(null)
+    const onFormSubmit = (val: boolean) => {
+      console.log(inputRef.value.validate())
+    }
     return {
       list,
-      user
+      user,
+      rules,
+      value,
+      onFormSubmit,
+      inputRef
     }
   }
 })

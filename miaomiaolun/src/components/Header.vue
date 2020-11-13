@@ -23,8 +23,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import DropDown from './DropDown'
-import DropDownItem from './DropDownItem'
+import DropDown from './DropDown.vue'
+import DropDownItem from './DropDownItem.vue'
 
 export interface UserProps {
   id: number,
@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup() {
     const currentIndex = ref("")
-    const changeIndex = (index) => {
+    const changeIndex = (index: any) => {
       currentIndex.value = index
       console.log(currentIndex.value)
     }
