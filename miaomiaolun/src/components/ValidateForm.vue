@@ -28,9 +28,11 @@ export default defineComponent({
       context.emit('form-submit', val)
     }
 
-    const callback = (func: boolean) => {
+    const callback = (func?: Func) => {
       // 将所有的函数都保存在数组中
-      funcArr.push(func)
+      if(func) {
+        funcArr.push(func)
+      }
     }
     emitter.on('all-true', callback)
     onUnmounted(() => {

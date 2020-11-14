@@ -15,6 +15,7 @@
     </validate-form>
     <p>{{value}}</p>
     <column-list :list="list"></column-list>
+    <Footer />
   </div>
 </template>
 
@@ -25,6 +26,7 @@ import ColumnList, {ColumnProps} from './components/ColumnList.vue'
 import Header from './components/Header.vue'
 import ValidateInput, {RulesProps} from './components/ValidateInput.vue'
 import ValidateForm from './components/ValidateForm.vue'
+import Footer from './components/Footer.vue'
 
 const rules: RulesProps = [
   {
@@ -66,7 +68,13 @@ const list: ColumnProps[] = [
     title: 'iiiiiiiiiiiii',
     avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
     description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  }
+  },
+  {
+    id: 6,
+    title: 'iiiiiiiiiiiii',
+    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
+    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
+  },
 ] 
 
 const user = {
@@ -80,7 +88,8 @@ export default defineComponent({
     ColumnList,
     Header,
     ValidateInput,
-    ValidateForm
+    ValidateForm,
+    Footer
   },
   setup() {
     const value = ref("")
