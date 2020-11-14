@@ -15,12 +15,14 @@
 <script lang="ts">
 import { defineComponent, PropType, reactive, onMounted } from "vue";
 import emitter from '../mitt'
+// 输入框中的约束
 interface InputProps {
   email: string,
   error: boolean,
   message: string
 }
 
+//验证规则的约束
 interface RuleProps {
   type: 'required' | 'email',
   message: string
@@ -30,9 +32,11 @@ export type RulesProps = RuleProps[]
 
 export default defineComponent({
   name: 'ValidateInput',
+  // 将非props中的属性不要挂载到根组件上
   inheritAttrs: false,
   props: {
     rules: Array as PropType<RulesProps>,
+    //v-model实现的value
     modelValue: String
   },
   setup(props, context) {
