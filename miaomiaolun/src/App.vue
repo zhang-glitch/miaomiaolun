@@ -1,21 +1,6 @@
 <template>
   <div class="app">
-    <Header :user="user"></Header>
-    <validate-form @form-submit="onFormSubmit">
-      <div class="form-group">
-        <label for="Email">邮箱地址</label>
-        <validate-input 
-          v-model="value" 
-          :rules="rules" 
-          placeholder="请输入邮箱地址" 
-          type="email" 
-          ref="inputRef"
-          ></validate-input>
-      </div>
-    </validate-form>
-    <p>{{value}}</p>
-    <column-list :list="list"></column-list>
-    <Footer />
+    <router-view></router-view>
   </div>
 </template>
 
@@ -38,50 +23,7 @@ const rules: RulesProps = [
     message: '请输入正确的邮箱地址'
   }
 ]
-const list: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'iiiiiiiiiiiii',
-    avatar: '',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 2,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 3,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 4,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 5,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 6,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-] 
 
-const user = {
-  id: 0,
-  name: 'zhanghao',
-  isLogin: true
-}
 export default defineComponent({
   name: 'App',
   components: {
@@ -98,8 +40,6 @@ export default defineComponent({
       console.log(inputRef.value.validate())
     }
     return {
-      list,
-      user,
       rules,
       value,
       onFormSubmit,

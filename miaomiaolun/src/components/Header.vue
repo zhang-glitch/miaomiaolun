@@ -45,8 +45,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const currentIndex = ref("")
-    const changeIndex = (index: any) => {
+    const currentIndex = ref(0)
+    const changeIndex = (index: number) => {
       currentIndex.value = index
       console.log(currentIndex.value)
     }
