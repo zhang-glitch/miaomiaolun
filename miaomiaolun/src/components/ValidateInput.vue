@@ -1,5 +1,5 @@
 <template>
-  <div class="validate-input">
+  <div class="validate-input pb-3">
      <input 
           class="form-control" 
           id="Email" 
@@ -24,7 +24,7 @@ interface InputProps {
 
 //验证规则的约束
 interface RuleProps {
-  type: 'required' | 'email',
+  type: 'required' | 'email' | 'password',
   message: string
 }
 
@@ -74,7 +74,10 @@ export default defineComponent({
               // 验证成功
               temp = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(inputVal.email)
               break;
-          
+
+            case 'password':
+              temp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/.test(inputVal.email)
+
             default:
               break;
           }

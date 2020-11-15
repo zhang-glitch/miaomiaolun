@@ -27,6 +27,10 @@ export default defineComponent({
     line-height: 80px;
     background: #000000;
     opacity: .8;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   ul {
     display: flex;
