@@ -18,17 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-
-export interface PostProps {
-  id?: number;
-  title: string;
-  content?: string;
-  image?: string;
-  // 时间
-  createdAt?: string;
-  columnId: number;
-}
-
+import {PostProps} from '../store'
 
 
 export default defineComponent({

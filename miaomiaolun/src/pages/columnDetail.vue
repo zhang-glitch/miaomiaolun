@@ -10,54 +10,16 @@
           <p class="text-muted">{{column.description}}</p>
         </div>
       </div>
-      <post-list :list="list"></post-list>
+      <post-list :list="postList"></post-list>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import {ColumnProps} from '../components/ColumnList.vue';
-import PostList, {PostProps} from '../components/PostList.vue'
-
-const column: ColumnProps = {
-    id: 1,
-    title: 'iiiiiiiiiiiii',
-    avatar: '../assets/avatar.jpg',
-    description: '哈哈哈哈达瓦大大啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊哒哒哒哒哒哒多多多多多多多多多多多多多多多多多多多多多多多多多多'
-  }
-
-
-const list: PostProps[] = [
-  {
-    id: 1,
-    title: 'iiiiiiiiiiiii',
-    image: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    content: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
-    createdAt: '2020/11/15 15:16'
-  },
-  {
-    id: 2,
-    title: 'iiiiiiiiiiiii',
-    image: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    content: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
-    createdAt: '2020/11/15 15:16'
-  },
-  {
-    id: 3,
-    title: 'iiiiiiiiiiiii',
-    image: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    content: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
-    createdAt: '2020/11/15 15:16'
-  },
-  {
-    id: 4,
-    title: 'iiiiiiiiiiiii',
-    image: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    content: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
-    createdAt: '2020/11/15 15:16'
-  }
-]
-  
+import { defineComponent, computed } from "vue";
+import PostList from '../components/PostList.vue'
+import {PostProps, StateProps, ColumnProps} from '../store'
+import {useStore} from 'vuex'
+import {useRoute} from 'vue-router'
 
 export default defineComponent({
   name: 'columnDetail',
@@ -65,9 +27,35 @@ export default defineComponent({
     PostList
   },
   setup() {
+    const store = useStore<StateProps>()
+    const route = useRoute()
+    const currentId = +route.params.id
+
+
+    //这里为什么获取会报错
+    // //获取所有专栏
+    // const columnList: ColumnProps[] = computed(() => {
+    //   return store.state.columnList
+    // })
+
+    // //获取指定专栏的列表
+    // const postListAll: PostProps[] = computed(() => {
+    //   return store.state.postList
+    // })
+    // const postList = postListAll.filter(item => item.columnId === currentId)
+
+    // const column = columnList.find(item => item.id === currentId)
+
+    const column = computed(() => {
+      return store.getters.getColumnById(currentId)
+    })
+
+    const postList = computed(() => {
+      return store.getters.getPostListById(currentId)
+    })
     return {
       column,
-      list
+      postList
     }
   }
 })

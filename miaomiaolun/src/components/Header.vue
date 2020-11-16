@@ -2,10 +2,10 @@
   <div class="header">
     <div class="container">
       <div class="header-box">
-        <div class="title"><a href="javascript:;">淼淼论</a></div>
+        <div class="title"><a href="/index">淼淼论</a></div>
         <div class="operate" v-if="!user.isLogin">
-          <a href="javascript:;" class="btn btn-outline-light">登录</a>
-          <a href="javascript:;" class="btn btn-outline-light">注册</a>
+          <a href="/login" class="btn btn-outline-light">登录</a>
+          <a href="/register" class="btn btn-outline-light">注册</a>
         </div>
         <div class="operate" v-else>
           <!-- <a href="javascript:;" class="btn btn-outline-light">hi, {{user.name}}</a> -->
@@ -25,12 +25,8 @@
 import { defineComponent, PropType, ref } from "vue";
 import DropDown from './DropDown.vue'
 import DropDownItem from './DropDownItem.vue'
+import {UserProps} from '../store/index'
 
-export interface UserProps {
-  id: number,
-  isLogin: boolean
-  name: string,
-}
 
 export default defineComponent({
   name: 'Header',

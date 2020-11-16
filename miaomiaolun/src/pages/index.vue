@@ -12,60 +12,28 @@
       </div>
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
-    <column-list :list="list"></column-list>
+    <column-list :list="columnList"></column-list>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import ColumnList, {ColumnProps} from "../components/ColumnList.vue";
-
-const list: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'iiiiiiiiiiiii',
-    avatar: '',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 2,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 3,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 4,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 5,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-  {
-    id: 6,
-    title: 'iiiiiiiiiiiii',
-    avatar: 'https://pic2.zhimg.com/80/v2-6cc71aa528262ee99461fc57eaafe869_720w.jpg?source=1940ef5c',
-    description: 'dwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-  },
-] 
+import { defineComponent, computed } from "vue";
+import ColumnList from "../components/ColumnList.vue";
+import { ColumnProps, StateProps } from '../store';
+import {useStore} from 'vuex'
 export default defineComponent({
   name: 'index',
   components: {
     ColumnList
   },
   setup() {
+
+    const store = useStore<StateProps>()
+    const columnList = computed(() => {
+      return store.state.columnList
+    })
     return {
-      list
+      columnList
     }
   }
 })
