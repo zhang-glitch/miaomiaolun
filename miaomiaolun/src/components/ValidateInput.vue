@@ -1,13 +1,21 @@
 <template>
   <div class="validate-input pb-3">
      <input 
-          class="form-control" 
-          id="Email" 
+          v-if="tag === 'input'"
+          class="form-control"
           :class="{'is-invalid': inputVal.error}"
           @blur="validate"
           @input="updateValue"
           v-bind="$attrs"
         >
+      <textarea
+        v-else
+        class="form-control" 
+        :class="{'is-invalid': inputVal.error}"
+        @blur="validate"
+        @input="updateValue"
+        v-bind="$attrs"
+      ></textarea>
         <small id="emailHelp" class="form-text text-muted invalid-feedback" v-if="inputVal.error">{{inputVal.message}}</small>
   </div>
 </template>
@@ -29,6 +37,8 @@ interface RuleProps {
 }
 
 export type RulesProps = RuleProps[]
+// 判断输入框是普通输入框，还是多行输入框
+type Tag = "input" | "textarea"
 
 export default defineComponent({
   name: 'ValidateInput',
@@ -37,7 +47,11 @@ export default defineComponent({
   props: {
     rules: Array as PropType<RulesProps>,
     //v-model实现的value
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<Tag>,
+      default: 'input'
+    }
   },
   setup(props, context) {
     const inputVal: InputProps = reactive({

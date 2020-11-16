@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType, computed} from 'vue';
-import {ColumnProps} from '../store/index'
+import {ColumnProps} from '../store'
 export default defineComponent({
   name: 'ColumnList',
   props: {

@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ComputedRef } from "vue";
 import PostList from '../components/PostList.vue'
 import {PostProps, StateProps, ColumnProps} from '../store'
 import {useStore} from 'vuex'
@@ -46,11 +46,11 @@ export default defineComponent({
 
     // const column = columnList.find(item => item.id === currentId)
 
-    const column = computed(() => {
+    const column: ComputedRef<ColumnProps> = computed(() => {
       return store.getters.getColumnById(currentId)
     })
 
-    const postList = computed(() => {
+    const postList: ComputedRef<PostProps[]> = computed(() => {
       return store.getters.getPostListById(currentId)
     })
     return {

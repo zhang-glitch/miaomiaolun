@@ -5,6 +5,7 @@ export interface UserProps {
   id?: number;
   isLogin: boolean;
   name?: string;
+  columnId?: number;
 }
 
 export interface ColumnProps {
@@ -34,7 +35,8 @@ const state: StateProps = {
   user: {
     id: 1,
     isLogin: true,
-    name: "zhanghao"
+    name: "zhanghao",
+    columnId: 1
   },
   columnList: columnList,
   postList: postList
@@ -53,9 +55,15 @@ const getters = {
   }
 };
 
+const mutations = {
+  addPost(state: StateProps, post: PostProps) {
+    state.postList.push(post);
+  }
+};
 const store = createStore({
   state,
-  getters
+  getters,
+  mutations
 });
 
 export default store;
