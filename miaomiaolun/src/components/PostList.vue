@@ -1,14 +1,14 @@
 <template>
   <div class="post-list">
-    <article v-for="item in list" :key="item.id" class="card mb-3 shadow-sm">
+    <article v-for="item in list" :key="item._id" class="card mb-3 shadow-sm">
       <div class="card-body">
-        <h4><router-link :to="`/posts/${item.id}/`">{{item.title}}</router-link></h4>
+        <!-- 通往文章的详情页 -->
+        <h4><router-link :to="`/posts/${item._id}`">{{item.title}}</router-link></h4>
         <div class="row my-3 align-items-center">
           <div v-if="item.image" class="col-4">
-            <img :src="item.image" :alt="item.title" class="rounded-lg w-50">
+            <img :src="item.image.url" :alt="item.title" class="rounded-lg w-50">
           </div>
-          <!-- <p :class="{'col-8': item.image}" class="text-muted">{{item.excerpt}}</p> -->
-          <p :class="{'col-8': item.image}" class="text-muted">{{item.content}}</p>
+          <p :class="{'col-8': item.image}" class="text-muted">{{item.excerpt}}</p>
         </div>
         <span class="text-muted">{{item.createdAt}}</span>
       </div>

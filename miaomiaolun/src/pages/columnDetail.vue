@@ -11,11 +11,14 @@
         </div>
       </div>
       <post-list :list="postList"></post-list>
+    <div class="text-center more">
+      <button class="btn btn-primary pl-10 pr-10" @click="addMore" v-show="isShow">加载更多</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ComputedRef } from "vue";
+import { defineComponent, computed, ComputedRef, reactive } from "vue";
 import PostList from '../components/PostList.vue'
 import {PostProps, StateProps, ColumnProps} from '../store'
 import {useStore} from 'vuex'
@@ -29,8 +32,7 @@ export default defineComponent({
   setup() {
     const store = useStore<StateProps>()
     const route = useRoute()
-    const currentId = +route.params.id
-
+    const currentId = route.params.id
 
     //这里为什么获取会报错
     // //获取所有专栏
@@ -46,26 +48,66 @@ export default defineComponent({
 
     // const column = columnList.find(item => item.id === currentId)
 
-    const column: ComputedRef<ColumnProps> = computed(() => {
-      return store.getters.getColumnById(currentId)
+    // const column: ComputedRef<ColumnProps> = computed(() => {
+    //   return store.getters.getColumnById(currentId)
+    // })
+
+    //发送请求，并且获取单个专栏
+    store.dispatch('getColumn', currentId)
+    const column = computed(() => {
+      return store.state.column
+    })
+    // const postList: ComputedRef<PostProps[]> = computed(() => {
+    //   return store.getters.getPostListById(currentId)
+    // })
+
+    //获取该专栏的整个文章列表
+    const postList = computed(() => {
+      return store.state.postList
     })
 
-    const postList: ComputedRef<PostProps[]> = computed(() => {
-      return store.getters.getPostListById(currentId)
+    // console.log("postList", postList)
+
+    const PageSize = reactive({
+      page: '1',
+      size: '5',
+      id: currentId
     })
+    store.dispatch("getPostList", PageSize)
+
+     // 获取专栏的总数量
+    const postListCount = computed(() => {
+      return store.state.postListCount
+    })
+
+    // 加载更多
+    const addMore = () => {
+      PageSize.size = (+PageSize.size + 1).toString()
+      store.dispatch('getPostList', PageSize)
+    }
+
+    // 判断是否还要数据，来控制加载按钮的显示和隐藏
+    const isShow = computed(() => {
+      // 判断是否需要隐藏加载更多按钮
+      return store.state.postListCount > postList.value.length ? true : false
+    })
+
     return {
       column,
-      postList
+      postList,
+      addMore,
+      isShow
     }
   }
 })
 </script>
 
-<style>
-  .text-muted {
-    /* width: 882px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; */
+<style scoped>
+  
+  .more {
+    margin: 20px 0 40px;
+  }
+  .pl-10 , .pr-10 {
+    padding: 10px 66px;
   }
 </style>

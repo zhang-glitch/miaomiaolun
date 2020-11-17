@@ -60,7 +60,8 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore<StateProps>()
     
-    // 这样将: ComputedRef<number>转化成number类型呢？
+    // 这样将: ComputedRef<number>转化成number类型呢？ 
+    // 答: 想要获取到值，我们不需要转换，直接用他的value属性即可
     // const columnId = computed(() => {
     //   return store.state.user.columnId
     // })
@@ -68,18 +69,18 @@ export default defineComponent({
     const onFormSubmit = (val: boolean) => {
       if(val) {
         // 将数据存储在postlist中
-        const columnId = store.state.user.columnId
-        if(columnId) {
+        const column = store.state.user.columnId
+        if(column) {
            const postval: PostProps = {
-            id: 1,
-            columnId,
+            _id: "1",
+            column,
             title: titleVal.value,
-            content: contentVal.value,
+            excerpt: contentVal.value,
             createdAt: new Date().toLocaleString()
           }
 
           store.commit("addPost", postval)
-          router.push(`/column/${columnId}`)
+          router.push(`/column/${column}`)
         }
       }
     }

@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { columnList, postList } from "../testData";
+import { columnList, postList, column } from "../testData";
 import axios from "axios";
 import { reactive } from "vue";
 
@@ -7,7 +7,7 @@ export interface UserProps {
   id?: number;
   isLogin: boolean;
   name?: string;
-  columnId?: number;
+  columnId?: string;
 }
 
 interface AvatarProps {
@@ -18,23 +18,25 @@ interface AvatarProps {
 interface PageSizeProps {
   page: string;
   size: string;
+  // 这个id表示的是专栏的id
+  id?: string;
 }
 
 export interface ColumnProps {
-  id: number;
+  _id: string;
   title: string;
   avatar: AvatarProps;
   description: string;
 }
 
 export interface PostProps {
-  id?: number;
+  _id?: string;
   title: string;
-  content?: string;
-  image?: string;
+  excerpt?: string;
+  image?: AvatarProps;
   // 时间
   createdAt?: string;
-  columnId: number;
+  column: string;
 }
 
 export interface StateProps {
@@ -42,6 +44,8 @@ export interface StateProps {
   columnList: ColumnProps[];
   postList: PostProps[];
   columnListCount: number;
+  postListCount: number;
+  column: ColumnProps;
 }
 
 const state: StateProps = {
@@ -49,22 +53,24 @@ const state: StateProps = {
     id: 1,
     isLogin: true,
     name: "zhanghao",
-    columnId: 1
+    columnId: "1"
   },
-  columnList: columnList,
-  postList: postList,
-  columnListCount: 0
+  columnList,
+  column,
+  postList,
+  columnListCount: 0,
+  postListCount: 0
 };
 
 const getters = {
   getColumnById(state: StateProps) {
-    return (id: number) => {
-      return state.columnList.find(item => item.id === id);
+    return (id: string) => {
+      return state.columnList.find(item => item._id === id);
     };
   },
   getPostListById(state: StateProps) {
-    return (id: number) => {
-      return state.postList.filter(item => item.columnId === id);
+    return (id: string) => {
+      return state.postList.filter(item => item.column === id);
     };
   }
 };
@@ -74,13 +80,22 @@ const mutations = {
   addPost(state: StateProps, post: PostProps) {
     state.postList.push(post);
   },
-  // 获取文章column列表
+  // 获取专栏column列表
   getColumnList(state: StateProps, columns: ColumnProps[]) {
     state.columnList = columns;
+  },
+  //获取单个专栏
+  getColumn(state: StateProps, column: ColumnProps) {
+    state.column = column;
+  },
+  // 获取post列表
+  getPostList(state: StateProps, posts: PostProps[]) {
+    state.postList = posts;
   }
 };
 
 const actions = {
+  // 获取专栏列表
   getColumnList(
     context: {
       commit: (arg0: string, arg1: ColumnProps[]) => void;
@@ -93,6 +108,38 @@ const actions = {
         // console.log("res", res);
         context.commit("getColumnList", res.data.list);
         state.columnListCount = res.data.count;
+      });
+  },
+
+  //根据专栏id获取单个专栏,即获取专栏详情
+  getColumn(
+    context: {
+      commit: (arg0: string, arg1: ColumnProps[]) => void;
+    },
+    id: string
+  ) {
+    axios.get(`/columns/${id}`).then(res => {
+      // console.log(res);
+      context.commit("getColumn", res.data);
+    });
+  },
+
+  //获取专栏文章列表
+  getPostList(
+    context: {
+      commit: (arg0: string, arg1: ColumnProps[]) => void;
+    },
+    PageSize: PageSizeProps
+  ) {
+    // console.log(PageSize);
+    axios
+      .get(
+        `/columns/${PageSize.id}/posts?currentPage=${PageSize.page}&pageSize=${PageSize.size}`
+      )
+      .then(res => {
+        console.log(res);
+        context.commit("getPostList", res.data.list);
+        state.postListCount = res.data.count;
       });
   }
 };
