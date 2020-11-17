@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../pages/home.vue";
-
+import { useStore } from "vuex";
+import { StateProps } from "../store";
+const store = useStore<StateProps>();
 const routes = [
   {
     path: "/",
@@ -21,8 +23,8 @@ const routes = [
       {
         path: "/create",
         name: "create",
-        component: () => import("../pages/createPost.vue")
-        // meta: { requiredLogin: true }
+        component: () => import("../pages/createPost.vue"),
+        meta: { requiredLogin: true }
       },
       {
         path: "/posts/:id",
@@ -34,7 +36,8 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../pages/login.vue")
+    component: () => import("../pages/login.vue"),
+    meta: { redirectIndex: true }
   },
   {
     path: "/register",
@@ -47,5 +50,19 @@ const router = createRouter({
   history: createWebHistory(),
   routes: routes
 });
+
+// router.beforeEach((to, from, next) => {
+//   // 判断是否未登录就访问了create
+//   const { isLogin } = store.state.user;
+//   if (isLogin) {
+//     if (to.meta.requiredLogin && !isLogin) {
+//       next({ name: "login" });
+//     } else if (to.meta.redirectIndex && isLogin) {
+//       next("/");
+//     } else {
+//       next();
+//     }
+//   }
+// });
 
 export default router;

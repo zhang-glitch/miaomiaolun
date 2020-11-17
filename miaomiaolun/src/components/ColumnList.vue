@@ -5,10 +5,10 @@
         <div class="col-4 mb-4"  v-for="item in columnList" :key="item.id">
           <div class="card h-100 shadow-sm">
             <div class="card-body text-center">
-              <img class="rounded-circle border border-light w-25 my-3" :src="item.avatar" alt="">
+              <img class="rounded-circle border border-light w-25 my-3" :src="item.avatar.url" alt="item.title">
               <h5 class="card-title">{{item.title}}</h5>
               <p class="card-text text-left">{{item.description}}</p>
-              <router-link class="btn btn-primary" :to="`/column/${item.id}`">进入专栏</router-link>
+              <router-link class="btn btn-outline-primary" :to="`/column/${item.id}`">进入专栏</router-link>
             </div>
           </div>
         </div>
@@ -32,7 +32,9 @@ export default defineComponent({
     const columnList = computed(() => {
       return props.list.map(item => {
         if(!item.avatar) {
-          item.avatar = require("../assets/avatar.jpg")
+          item.avatar = {
+            url: require("../assets/avatar.jpg")
+          }
         }
         return item
       })
@@ -45,6 +47,17 @@ export default defineComponent({
 })
 </script>
 
-<style>
-
+<style scoped>
+  .card {
+    position: relative;
+  }
+  .card-text {
+    margin-bottom: 60px;
+  }
+  .btn {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translate(-50%);
+  }
 </style>
