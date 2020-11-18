@@ -16,18 +16,22 @@
     <div class="text-center more">
       <button class="btn btn-primary pl-10 pr-10" @click="addMore" v-show="isShow">加载更多</button>
     </div>
+    <!-- 这里只能用v-if，不能用v-show -->
+    <Loader v-if="isLoading"></Loader>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, reactive, ref } from "vue";
 import ColumnList from "../components/ColumnList.vue";
+import Loader from '../components/Loader.vue'
 import { ColumnProps, StateProps } from '../store';
 import {useStore} from 'vuex'
 export default defineComponent({
   name: 'index',
   components: {
-    ColumnList
+    ColumnList,
+    Loader
   },
   setup() {
     const store = useStore<StateProps>()
@@ -61,10 +65,13 @@ export default defineComponent({
       // 判断是否需要隐藏加载更多按钮
       return store.state.columnListCount > columnList.value.length ? true : false
     })
+
+    const isLoading = computed(() => store.state.loading)
     return {
       columnList,
       addMore,
-      isShow
+      isShow,
+      isLoading
     }
   }
 })

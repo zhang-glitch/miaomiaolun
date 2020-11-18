@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { createStore, ActionContext } from "vuex";
 import { columnList, postList, column } from "../testData";
 import axios from "axios";
 import { reactive } from "vue";
@@ -46,6 +46,7 @@ export interface StateProps {
   columnListCount: number;
   postListCount: number;
   column: ColumnProps;
+  loading: boolean;
 }
 
 const state: StateProps = {
@@ -59,7 +60,8 @@ const state: StateProps = {
   column,
   postList,
   columnListCount: 0,
-  postListCount: 0
+  postListCount: 0,
+  loading: false
 };
 
 const getters = {
@@ -91,53 +93,55 @@ const mutations = {
   // 获取post列表
   getPostList(state: StateProps, posts: PostProps[]) {
     state.postList = posts;
+  },
+  // 设置loading
+  setLoading(state: StateProps, bool: boolean) {
+    state.loading = bool;
   }
 };
 
 const actions = {
   // 获取专栏列表
   getColumnList(
-    context: {
-      commit: (arg0: string, arg1: ColumnProps[]) => void;
-    },
+    context: ActionContext<StateProps, StateProps>,
     PageSize: PageSizeProps
   ) {
+    // context.state.loading = true;
     axios
       .get(`/columns?currentPage=${PageSize.page}&pageSize=${PageSize.size}`)
       .then(res => {
         // console.log("res", res);
+        // context.state.loading = false;
         context.commit("getColumnList", res.data.list);
         state.columnListCount = res.data.count;
       });
   },
 
   //根据专栏id获取单个专栏,即获取专栏详情
-  getColumn(
-    context: {
-      commit: (arg0: string, arg1: ColumnProps[]) => void;
-    },
-    id: string
-  ) {
+  getColumn(context: ActionContext<StateProps, StateProps>, id: string) {
+    // context.state.loading = true;
     axios.get(`/columns/${id}`).then(res => {
       // console.log(res);
+      // context.state.loading = false;
       context.commit("getColumn", res.data);
     });
   },
 
   //获取专栏文章列表
   getPostList(
-    context: {
-      commit: (arg0: string, arg1: ColumnProps[]) => void;
-    },
+    context: ActionContext<StateProps, StateProps>,
     PageSize: PageSizeProps
   ) {
     // console.log(PageSize);
+    // context.state.loading = true;
     axios
       .get(
         `/columns/${PageSize.id}/posts?currentPage=${PageSize.page}&pageSize=${PageSize.size}`
       )
       .then(res => {
-        console.log(res);
+        // console.log(res);
+        // // 设置loading为false
+        // context.state.loading = false;
         context.commit("getPostList", res.data.list);
         state.postListCount = res.data.count;
       });

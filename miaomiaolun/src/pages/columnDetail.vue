@@ -14,12 +14,14 @@
     <div class="text-center more">
       <button class="btn btn-primary pl-10 pr-10" @click="addMore" v-show="isShow">加载更多</button>
     </div>
+    <Loader v-if="isLoading"></Loader>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ComputedRef, reactive } from "vue";
 import PostList from '../components/PostList.vue'
+import Loader from '../components/Loader.vue'
 import {PostProps, StateProps, ColumnProps} from '../store'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
@@ -27,7 +29,8 @@ import {useRoute} from 'vue-router'
 export default defineComponent({
   name: 'columnDetail',
   components: {
-    PostList
+    PostList,
+    Loader
   },
   setup() {
     const store = useStore<StateProps>()
@@ -92,11 +95,16 @@ export default defineComponent({
       return store.state.postListCount > postList.value.length ? true : false
     })
 
+    // 获取loading
+    const isLoading = computed(() => store.state.loading)
+    console.log(isLoading)
+
     return {
       column,
       postList,
       addMore,
-      isShow
+      isShow,
+      isLoading
     }
   }
 })
