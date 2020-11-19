@@ -4,10 +4,10 @@ import axios from "axios";
 import { reactive } from "vue";
 
 export interface UserProps {
-  id?: number;
+  _id?: string;
   isLogin: boolean;
-  name?: string;
-  columnId?: string;
+  nickName?: string;
+  column?: string;
 }
 
 interface AvatarProps {
@@ -47,21 +47,36 @@ export interface StateProps {
   postListCount: number;
   column: ColumnProps;
   loading: boolean;
+  token: string;
+  error: ErrorProps;
+}
+
+// 登录的账号和密码
+export interface EmailPasswordProps {
+  email: string;
+  password: string;
+}
+
+export interface ErrorProps {
+  isError: boolean;
+  message?: string;
 }
 
 const state: StateProps = {
   user: {
-    id: 1,
-    isLogin: true,
-    name: "zhanghao",
-    columnId: "1"
+    _id: "",
+    isLogin: false,
+    nickName: "zhanghao",
+    column: "1"
   },
   columnList,
   column,
   postList,
   columnListCount: 0,
   postListCount: 0,
-  loading: false
+  loading: false,
+  token: localStorage.getItem("token") || "",
+  error: { isError: false }
 };
 
 const getters = {
@@ -97,6 +112,26 @@ const mutations = {
   // 设置loading
   setLoading(state: StateProps, bool: boolean) {
     state.loading = bool;
+  },
+  // 判断登录
+  getLogin(state: StateProps, token: string) {
+    state.token = token;
+    localStorage.setItem("token", token);
+  },
+  //获取当前用户
+  getUser(state: StateProps, userVal: any) {
+    state.user = { isLogin: true, ...userVal };
+  },
+  //退出登录
+  logout(state: StateProps) {
+    state.token = "";
+    state.user = { isLogin: false };
+    localStorage.remove("token");
+    delete axios.defaults.headers.common.Authorization;
+  },
+  //错误提示
+  handleErr(state: StateProps, err: ErrorProps) {
+    state.error = err;
   }
 };
 
@@ -145,7 +180,29 @@ const actions = {
         context.commit("getPostList", res.data.list);
         state.postListCount = res.data.count;
       });
+  },
+
+  //获取登录后的token
+  async getLogin(
+    context: ActionContext<StateProps, StateProps>,
+    emailPassword: EmailPasswordProps
+  ) {
+    const { data } = await axios.post("/user/login", emailPassword);
+    // console.log(data);
+    context.commit("getLogin", data.token);
+  },
+
+  //获取用户信息
+  async getUser(context: ActionContext<StateProps, StateProps>) {
+    const { data } = await axios.get("/user/current");
+    console.log(data);
+    context.commit("getUser", data);
   }
+
+  // //退出登录
+  // logout(context: ActionContext<StateProps, StateProps>) {
+  //   context.commit("logout");
+  // }
 };
 const store = createStore({
   state,

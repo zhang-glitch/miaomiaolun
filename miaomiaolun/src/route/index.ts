@@ -30,19 +30,24 @@ const routes = [
         path: "/posts/:id",
         name: "post",
         component: () => import("../pages/postDetail.vue")
+      },
+      {
+        path: "/login",
+        name: "login",
+        component: () => import("../pages/login.vue"),
+        meta: { redirectIndex: true }
+      },
+      {
+        path: "/register",
+        name: "register",
+        component: () => import("../pages/register.vue")
+      },
+      {
+        path: "/edit",
+        name: "edit",
+        component: () => import("../pages/edit.vue")
       }
     ]
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("../pages/login.vue"),
-    meta: { redirectIndex: true }
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: () => import("../pages/register.vue")
   }
 ];
 

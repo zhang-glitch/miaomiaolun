@@ -97,7 +97,7 @@ export default defineComponent({
 
     // 获取loading
     const isLoading = computed(() => store.state.loading)
-    console.log(isLoading)
+    // console.log(isLoading)
 
     return {
       column,

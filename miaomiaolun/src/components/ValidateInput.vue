@@ -1,5 +1,5 @@
 <template>
-  <div class="validate-input pb-3">
+  <div class="validate-input pb-2">
      <input 
           v-if="tag === 'input'"
           class="form-control"

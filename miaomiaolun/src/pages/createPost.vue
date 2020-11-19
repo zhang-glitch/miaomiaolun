@@ -69,7 +69,7 @@ export default defineComponent({
     const onFormSubmit = (val: boolean) => {
       if(val) {
         // 将数据存储在postlist中
-        const column = store.state.user.columnId
+        const column = store.state.user.column
         if(column) {
            const postval: PostProps = {
             _id: "1",

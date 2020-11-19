@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a class="dropdown-item" href="javascript:;">
+    <a class="dropdown-item" :href="path">
       <slot></slot>
     </a>
   </div>
@@ -11,7 +11,12 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: 'DropDownItem',
-
+  props: {
+    path: {
+      type: String,
+      required: true
+    }
+  }
 })
 </script>
 

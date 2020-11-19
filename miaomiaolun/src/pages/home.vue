@@ -24,6 +24,12 @@ export default defineComponent({
     const user = computed(() => {
       return store.state.user
     })
+
+    //如果存在token,则发送请求
+    // if(store.state.token) {
+    //   // 发送请求，获取用户信息
+    //   store.dispatch('getUser')
+    // }
     return {
       user
     }

@@ -8,36 +8,40 @@
           <validate-input
             type="text"
             placeholder="请输入邮箱地址"
-            v-model="emailValue"
+            v-model="emailPassword.email"
             :rules="emailRules"
           ></validate-input>
         </div>
         <div class="mb-3">
-          <label class="form-label">邮箱地址</label>
+          <label class="form-label">密码</label>
           <validate-input
             type="password"
             placeholder="请输入密码"
-            v-model="passwordValue"
+            v-model="emailPassword.password"
             :rules="passwordRules"
           ></validate-input>
         </div>
-        
+        <a href="/register" class="skip-register">还没有账户？去注册一个新的吧！</a>
         <template #submit>
           <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
         </template>
         
       </validate-form>
+      <Loader v-if="isLoading"/>
+      <Message :alertType="alertType"/>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, reactive, computed } from "vue";
 import { useRouter } from 'vue-router'
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, {RulesProps} from '../components/ValidateInput.vue'
-import Footer from '../components/Footer.vue'
+import {useStore} from 'vuex'
+import Loader from '../components/Loader.vue'
+import { StateProps } from '../store';
+import Message, {AlertTypeProps} from '../components/Message.vue'
 
 const emailRules: RulesProps = [
   {
@@ -65,28 +69,67 @@ export default defineComponent({
   components: {
     ValidateForm,
     ValidateInput,
-    Footer
+    Loader,
+    Message
   },
   setup() {
-    const emailValue = ref("")
-    const passwordValue = ref("")
+    // const emailValue = ref("")
+    // const passwordValue = ref("")
+
+    let emailPassword = reactive({
+      email: '',
+      password: ''
+    })
+
+    // 初始化alert弹框的内容
+    let alertType = reactive({
+      type: '',
+      message: ''
+    })
     const router = useRouter()
+    const store = useStore<StateProps>()
     const onFormSubmit = (val: boolean) => {
       if(val) {
-        router.push('/index')
+        store.dispatch('getLogin', emailPassword)
+        if(store.state.token) {
+          // 请求成功的时候设置alert样式
+          alertType.type = 'success'
+          alertType.message = "请求成功，即将跳转到首页"
+          // 获取用户信息
+          store.dispatch('getUser')
+          router.push('/index')
+        }else {
+          const err = computed(() => store.state.error)
+          // console.log(err)
+          if(err.value.isError && err.value.message) {
+            alertType.type = 'danger'
+            alertType.message = err.value.message
+            // console.log(err.value.message)
+          }
+        }
       }
     }
+
+    
+    const isLoading = computed(() => store.state.loading)
     return {
-      emailValue,
-      passwordValue,
+      // emailValue,
+      // passwordValue,
       onFormSubmit,
       emailRules,
-      passwordRules
+      passwordRules,
+      emailPassword,
+      isLoading,
+      alertType
     }
   }
 })
 </script>
 
-<style>
-
+<style scoped>
+  .skip-register {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+  }
 </style>
