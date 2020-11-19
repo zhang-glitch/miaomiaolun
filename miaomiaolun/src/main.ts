@@ -10,6 +10,7 @@ axios.interceptors.request.use(config => {
   let token = localStorage.getItem("token");
   config.headers.common.Authorization = `Bearer ${token}`;
   // store.state.loading = true;
+  store.commit("handleErr", { isError: false });
 
   store.commit("setLoading", true);
   return config;
@@ -25,6 +26,8 @@ axios.interceptors.response.use(
       // store.state.loading = false;
       store.commit("setLoading", false);
       return result;
+    } else {
+      store.commit("setLoading", false);
     }
   },
   err => {

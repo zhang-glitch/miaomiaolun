@@ -1,8 +1,8 @@
 <template>
  <teleport to="#message">
     <div class=" message alert message-info fixed-top  mx-auto d-flex justify-content-between mt-2">
-      <div class="alert" :class="`alert-${alertType.type}`" role="alert">
-        {{alertType.message}}
+      <div class="alert" :class="`alert-${type}`" role="alert">
+        {{message}}
       </div>
     </div>
  </teleport>
@@ -10,17 +10,16 @@
 
 <script lang="ts">
 import { defineComponent, onUnmounted, PropType } from "vue";
-export  interface AlertTypeProps {
-  type: 'success' | "danger" | 'warning';
-  message?: string;
-}
+
+export type MessageType = 'success' | 'error' | 'default'
 export default defineComponent({
   name: 'Message',
   props: {
-    alertType: {
-      type: Object as PropType<AlertTypeProps>,
+    type: {
+      type: String as PropType<MessageType>,
       required: true
-    }
+    },
+    message: String
   },
   setup(props) {
     const oDiv = document.createElement('div');

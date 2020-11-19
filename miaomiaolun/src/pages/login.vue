@@ -28,20 +28,19 @@
         
       </validate-form>
       <Loader v-if="isLoading"/>
-      <Message :alertType="alertType"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from "vue";
+import { defineComponent, ref, reactive, computed, watch } from "vue";
 import { useRouter } from 'vue-router'
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, {RulesProps} from '../components/ValidateInput.vue'
 import {useStore} from 'vuex'
 import Loader from '../components/Loader.vue'
 import { StateProps } from '../store';
-import Message, {AlertTypeProps} from '../components/Message.vue'
+import CreateMessage from '../components/CreateMessage'
 
 const emailRules: RulesProps = [
   {
@@ -70,7 +69,6 @@ export default defineComponent({
     ValidateForm,
     ValidateInput,
     Loader,
-    Message
   },
   setup() {
     // const emailValue = ref("")
@@ -80,12 +78,6 @@ export default defineComponent({
       email: '',
       password: ''
     })
-
-    // 初始化alert弹框的内容
-    let alertType = reactive({
-      type: '',
-      message: ''
-    })
     const router = useRouter()
     const store = useStore<StateProps>()
     const onFormSubmit = (val: boolean) => {
@@ -93,19 +85,22 @@ export default defineComponent({
         store.dispatch('getLogin', emailPassword)
         if(store.state.token) {
           // 请求成功的时候设置alert样式
-          alertType.type = 'success'
-          alertType.message = "请求成功，即将跳转到首页"
-          // 获取用户信息
-          store.dispatch('getUser')
-          router.push('/index')
+          CreateMessage("请求成功，即将跳转到首页", 'success')
+          setTimeout(() => {
+            // 获取用户信息
+            store.dispatch('getUser')
+            router.push('/index')
+          }, 2000)
         }else {
           const err = computed(() => store.state.error)
-          // console.log(err)
-          if(err.value.isError && err.value.message) {
-            alertType.type = 'danger'
-            alertType.message = err.value.message
-            // console.log(err.value.message)
-          }
+          watch(() => err.value.isError, () => {
+            const {isError, message} = err.value
+            // console.log(err)
+            if(isError && message) {
+              // console.log(err.value.message)
+              CreateMessage(message, 'danger')
+            }
+          })
         }
       }
     }
@@ -120,7 +115,6 @@ export default defineComponent({
       passwordRules,
       emailPassword,
       isLoading,
-      alertType
     }
   }
 })
