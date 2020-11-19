@@ -2,31 +2,33 @@
   <div class="login-page mx-auto p-3 w-330">
     <div class="container">
       <h5 class="my-4 text-center">登录到淼淼论</h5>
-      <validate-form @form-submit="onFormSubmit" :style="{'width': '300px', 'marginLeft': '520px'}">
-        <div class="mb-3">
-          <label class="form-label">邮箱地址</label>
-          <validate-input
-            type="text"
-            placeholder="请输入邮箱地址"
-            v-model="emailPassword.email"
-            :rules="emailRules"
-          ></validate-input>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">密码</label>
-          <validate-input
-            type="password"
-            placeholder="请输入密码"
-            v-model="emailPassword.password"
-            :rules="passwordRules"
-          ></validate-input>
-        </div>
-        <a href="/register" class="skip-register">还没有账户？去注册一个新的吧！</a>
-        <template #submit>
-          <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
-        </template>
-        
-      </validate-form>
+      <div class="row">
+        <validate-form @form-submit="onFormSubmit" class="col-3">
+          <div class="mb-3">
+            <label class="form-label">邮箱地址</label>
+            <validate-input
+              type="text"
+              placeholder="请输入邮箱地址"
+              v-model="emailPassword.email"
+              :rules="emailRules"
+            ></validate-input>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">密码</label>
+            <validate-input
+              type="password"
+              placeholder="请输入密码"
+              v-model="emailPassword.password"
+              :rules="passwordRules"
+            ></validate-input>
+          </div>
+          <a href="/register" class="skip-register">还没有账户？去注册一个新的吧！</a>
+          <template #submit>
+            <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+          </template>
+          
+        </validate-form>
+      </div>
       <Loader v-if="isLoading"/>
     </div>
   </div>
@@ -123,7 +125,9 @@ export default defineComponent({
 <style scoped>
   .skip-register {
     display: inline-block;
-    margin-bottom: 20px;
     text-decoration: none;
+  }
+  .row {
+    justify-content: center;
   }
 </style>

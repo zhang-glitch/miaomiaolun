@@ -47,6 +47,9 @@ export default defineComponent({
 })
 </script>
 
-<style>
-
+<style scoped>
+  .submit-area {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
 </style>

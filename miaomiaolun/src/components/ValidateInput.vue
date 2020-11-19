@@ -32,8 +32,9 @@ interface InputProps {
 
 //验证规则的约束
 interface RuleProps {
-  type: 'required' | 'email' | 'password',
-  message: string
+  type: 'required' | 'email' | 'password' | 'custom',
+  message: string,
+  valdator?: () => boolean
 }
 
 export type RulesProps = RuleProps[]
@@ -91,7 +92,10 @@ export default defineComponent({
 
             case 'password':
               temp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/.test(inputVal.email)
+              break;
 
+            case 'custom': 
+              temp = item.valdator ? item.valdator() : true
             default:
               break;
           }
