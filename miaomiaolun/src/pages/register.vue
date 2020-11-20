@@ -52,12 +52,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, computed, watch } from "vue";
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, {RulesProps} from '../components/ValidateInput.vue'
 import axios from 'axios'
 import CreateMessage from '../components/CreateMessage'
 import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import { StateProps } from '../store';
 
 const emailRules: RulesProps = [
   {
@@ -100,7 +102,8 @@ export default defineComponent({
       repeatPassword: ''
     })
 
-    const router = useRouter()
+    const router = useRouter();
+    const store = useStore<StateProps>();
     const repeatPasswordRules: RulesProps = [
       {
         type: 'required',
@@ -115,7 +118,6 @@ export default defineComponent({
     ]
 
     const onFormSubmit = async (val: boolean) => {
-      // console.log(val)
       if(val) {
         // 发送请求
         await axios.post('/users', {
@@ -123,10 +125,24 @@ export default defineComponent({
             'nickName': inputValue.username,
             'password': inputValue.password
         })
+         
+
+        //注册失败
+        const err = computed(() => store.state.error)
+        const {isError, message} = err.value
+        watch(() => isError, () => {
+          if(isError && message) {
+            CreateMessage(message, "danger")
+          }
+        })
+
+        
+        //注册成功
         CreateMessage('注册成功，即将跳转到登录页面', 'success')
         setTimeout(() => {
           router.push('/login')
         }, 2000)
+         
       }
     }
     return {

@@ -90,7 +90,7 @@ export default defineComponent({
           CreateMessage("请求成功，即将跳转到首页", 'success')
           setTimeout(() => {
             // 获取用户信息
-            store.dispatch('getUser')
+            // store.dispatch('getUser')
             router.push('/index')
           }, 2000)
         }else {

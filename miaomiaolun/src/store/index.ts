@@ -49,6 +49,7 @@ export interface StateProps {
   loading: boolean;
   token: string;
   error: ErrorProps;
+  postDetail: PostDetailProps;
 }
 
 // 登录的账号和密码
@@ -62,12 +63,32 @@ export interface ErrorProps {
   message?: string;
 }
 
+export interface AuthorProps {
+  avatar?: AvatarProps;
+  description?: string;
+  nickName?: string;
+  _id?: string;
+  email?: string;
+}
+
+export interface PostDetailProps {
+  _id?: string;
+  author?: AuthorProps;
+  column?: string;
+  content?: string;
+  createdAt?: string;
+  excerpt?: string;
+  image?: AvatarProps;
+  isHTML?: boolean;
+  title?: string;
+}
+
 const state: StateProps = {
   user: {
     _id: "",
     isLogin: false,
-    nickName: "zhanghao",
-    column: "1"
+    nickName: "",
+    column: ""
   },
   columnList,
   column,
@@ -76,7 +97,8 @@ const state: StateProps = {
   postListCount: 0,
   loading: false,
   token: localStorage.getItem("token") || "",
-  error: { isError: false }
+  error: { isError: false },
+  postDetail: {}
 };
 
 const getters = {
@@ -132,6 +154,10 @@ const mutations = {
   //错误提示
   handleErr(state: StateProps, err: ErrorProps) {
     state.error = err;
+  },
+  // 获取文章详情页信息
+  getPostDetail(state: StateProps, val: any) {
+    state.postDetail = val;
   }
 };
 
@@ -195,14 +221,24 @@ const actions = {
   //获取用户信息
   async getUser(context: ActionContext<StateProps, StateProps>) {
     const { data } = await axios.get("/user/current");
-    console.log(data);
+    // console.log(data);
     context.commit("getUser", data);
-  }
+  },
 
   // //退出登录
   // logout(context: ActionContext<StateProps, StateProps>) {
   //   context.commit("logout");
-  // }
+  // },
+
+  // 获取文章详情
+  async getPostDetail(
+    context: ActionContext<StateProps, StateProps>,
+    id: string
+  ) {
+    const { data } = await axios.get(`/posts/${id}`);
+    // console.log(data);
+    context.commit("getPostDetail", data);
+  }
 };
 const store = createStore({
   state,

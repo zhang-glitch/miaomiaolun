@@ -11,6 +11,7 @@ axios.interceptors.request.use(config => {
   config.headers.common.Authorization = `Bearer ${token}`;
   // store.state.loading = true;
   store.commit("handleErr", { isError: false });
+  // console.log("前", store.state.error);
 
   store.commit("setLoading", true);
   return config;
@@ -37,6 +38,7 @@ axios.interceptors.response.use(
     // console.log("error", error.response);
     const { error } = err.response.data;
     store.commit("handleErr", { isError: true, message: error });
+    // console.log(store.state.error);
     return Promise.reject(error);
   }
 );
