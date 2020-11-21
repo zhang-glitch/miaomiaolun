@@ -1,7 +1,6 @@
 import { createStore, ActionContext } from "vuex";
 import { columnList, postList, column } from "../testData";
 import axios from "axios";
-import { reactive } from "vue";
 
 export interface UserProps {
   _id?: string;
@@ -181,13 +180,12 @@ const actions = {
   },
 
   //根据专栏id获取单个专栏,即获取专栏详情
-  getColumn(context: ActionContext<StateProps, StateProps>, id: string) {
+  async getColumn(context: ActionContext<StateProps, StateProps>, id: string) {
     // context.state.loading = true;
-    axios.get(`/columns/${id}`).then(res => {
-      // console.log(res);
-      // context.state.loading = false;
-      context.commit("getColumn", res.data);
-    });
+    const { data } = await axios.get(`/columns/${id}`);
+    context.commit("getColumn", data);
+    // console.log("getColumn", data);
+    return data;
   },
 
   //获取专栏文章列表
@@ -223,8 +221,9 @@ const actions = {
   //获取用户信息
   async getUser(context: ActionContext<StateProps, StateProps>) {
     const { data } = await axios.get("/user/current");
-    console.log(data);
+    // console.log("getUser", data);
     context.commit("getUser", data);
+    return data;
   },
 
   // //退出登录
