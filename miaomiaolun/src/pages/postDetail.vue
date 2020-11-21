@@ -37,16 +37,28 @@
           <div class="edit-del" v-show="isOperate">
             <router-link :to="{name: 'create', query: {id: postDetailVal._id}}" 
             class="btn btn-primary edit-btn">编辑</router-link>
-            <button class="btn btn-danger" @click="delPost">删除</button>
+            <button class="btn btn-danger" @click="isOpen=true">删除</button>
           </div>
         </div>
       </div>
     </div>
+    <Modal @close-modal="closeModal" v-if="isOpen">
+      <template #title>
+        <h4>删除文章</h4>
+      </template>
+      <template #body>
+        <p>确定要删除这篇文章吗？</p>
+      </template>
+      <template #footer>
+        <button class="btn btn-primary" :style="{'marginRight': '10px'}" @click="delPost">确定</button>
+        <button class="btn btn-secondary" @click="closeModal">取消</button>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import {useStore} from 'vuex'
 import { StateProps } from '../store';
 import {useRoute} from 'vue-router'
@@ -54,9 +66,13 @@ import MarkDownIt from 'markdown-it'
 import axios from 'axios'
 import CreateMessage from '../components/CreateMessage';
 import router from '../route';
+import Modal from '../components/Modal.vue'
 
 export default defineComponent({
   name: 'postDetail',
+  components: {
+    Modal
+  },
   setup() {
     const store = useStore<StateProps>()
     const route = useRoute()
@@ -90,9 +106,16 @@ export default defineComponent({
       }
     })
 
+    //控制会话框
+    const isOpen = ref(false)
+    const closeModal = () => {
+      isOpen.value = false
+    }
 
     // 删除文章
     const delPost = () => {
+      // 打开会话框
+      isOpen.value = true;
       const {column} = store.state.user
      if(column) {
         axios.delete(`/posts/${id}`).then((res) => {
@@ -111,7 +134,9 @@ export default defineComponent({
       userAvatar,
       contentHTML,
       isOperate,
-      delPost
+      delPost,
+      closeModal,
+      isOpen
     }
   }
 })
