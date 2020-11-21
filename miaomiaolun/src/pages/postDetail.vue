@@ -10,8 +10,8 @@
             <li class="breadcrumb-item active" aria-current="page">{{postDetailVal.title}}</li>
           </ol>
           <div class="detail-box">
-            <div class="mb-5" v-if="postDetailVal.image">
-              <img :src="postDetailVal.image.url" class="img-fluid" alt="Responsive image">
+            <div class="mb-5 bg-img" v-if="postDetailVal.image">
+              <img :src="postDetailVal.image.url" >
             </div>
             <h3 class="mb-4">{{postDetailVal.title}}</h3>
             <div class="border-top border-bottom py-3 mb-3 align-items-center row g-0">
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="content">
-              <p v-html="postDetailVal.content"></p>
+              <p v-html="contentHTML"></p>
             </div>
           </div>
         </div>
@@ -45,6 +45,7 @@ import { computed, defineComponent } from "vue";
 import {useStore} from 'vuex'
 import { StateProps } from '../store';
 import {useRoute} from 'vue-router'
+import MarkDownIt from 'markdown-it'
 
 export default defineComponent({
   name: 'postDetail',
@@ -53,10 +54,18 @@ export default defineComponent({
     const route = useRoute()
     const id = route.params.id
     store.dispatch('getPostDetail', id).then((res) => {
-      console.log(res)
+      // console.log(res)
     })
     const postDetailVal = computed(() => store.state.postDetail)
     // console.log(postDetailVal)
+
+    // 将markdown转化为html
+    const md = new MarkDownIt()
+    const contentHTML = computed(() => {
+      if(postDetailVal.value && postDetailVal.value.content) {
+        return md.render(postDetailVal.value.content)
+      }
+    })
 
     // 处理用户头像问题
     const userAvatar = computed(() => {
@@ -68,7 +77,8 @@ export default defineComponent({
     })
     return {
       postDetailVal,
-      userAvatar
+      userAvatar,
+      contentHTML
     }
   }
 })
@@ -106,6 +116,11 @@ export default defineComponent({
 
   .detail-box {
     margin-bottom: 100px;
+  }
+
+  .bg-img img {
+    height: 400px;
+    width: 100%;
   }
 
 </style>
