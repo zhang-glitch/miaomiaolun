@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="drop-down-item">
     <a class="dropdown-item" :href="path">
       <slot></slot>
     </a>
@@ -16,9 +16,16 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+  setup(props){
+    
+    console.log(props.path)
   }
 })
 </script>
 
 <style scoped>
+  .drop-down-item {
+    cursor: pointer;
+  }
 </style>

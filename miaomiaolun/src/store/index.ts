@@ -10,7 +10,7 @@ export interface UserProps {
   column?: string;
 }
 
-interface AvatarProps {
+export interface AvatarProps {
   _id?: string;
   url?: string;
 }
@@ -148,7 +148,7 @@ const mutations = {
   logout(state: StateProps) {
     state.token = "";
     state.user = { isLogin: false };
-    localStorage.remove("token");
+    localStorage.removeItem("token");
     delete axios.defaults.headers.common.Authorization;
   },
   //错误提示
@@ -159,6 +159,8 @@ const mutations = {
   getPostDetail(state: StateProps, val: any) {
     state.postDetail = val;
   }
+  // // 创建一个新的文章
+  // createPost(state)
 };
 
 const actions = {
@@ -238,6 +240,7 @@ const actions = {
     const { data } = await axios.get(`/posts/${id}`);
     // console.log(data);
     context.commit("getPostDetail", data);
+    return data;
   }
 };
 const store = createStore({

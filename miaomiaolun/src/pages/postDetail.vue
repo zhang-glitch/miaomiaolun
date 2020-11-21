@@ -17,9 +17,9 @@
             <div class="border-top border-bottom py-3 mb-3 align-items-center row g-0">
               <div class="col d-flex user">
                 <div class="user-box">
-                  <div class="img d-flex align-items-center" v-if="postDetailVal.author">
-                    <img :src="postDetailVal.author.avatar.url" alt="" class="rounded-circle img-thumbnail">
-                    <div class="info ml-2">
+                  <div class="img d-flex align-items-center">
+                    <img :src="userAvatar" alt="" class="rounded-circle img-thumbnail">
+                    <div class="info ml-2" v-if="postDetailVal.author">
                       <h5>{{postDetailVal.author.nickName}}</h5>
                       <p class="text-truncate text-muted d-block">{{postDetailVal.author.description}}</p>
                     </div>
@@ -52,11 +52,23 @@ export default defineComponent({
     const store = useStore<StateProps>()
     const route = useRoute()
     const id = route.params.id
-    store.dispatch('getPostDetail', id)
+    store.dispatch('getPostDetail', id).then((res) => {
+      console.log(res)
+    })
     const postDetailVal = computed(() => store.state.postDetail)
-    console.log(postDetailVal)
+    // console.log(postDetailVal)
+
+    // 处理用户头像问题
+    const userAvatar = computed(() => {
+      if(postDetailVal.value.author && postDetailVal.value.author.avatar) {
+        return postDetailVal.value.author.avatar.url
+      }else {
+        return require('../assets/avatar.jpg')
+      }
+    })
     return {
-      postDetailVal
+      postDetailVal,
+      userAvatar
     }
   }
 })

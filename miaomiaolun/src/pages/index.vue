@@ -43,7 +43,7 @@ export default defineComponent({
     //规定请求数据的参数
     const PageSize = reactive({
       page: "1",
-      size: "5"
+      size: "6"
     });
     //发送请求
     store.dispatch('getColumnList', PageSize) 
