@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, watch } from "vue";
 import axios from 'axios'
 
 type StatusProps = 'ready' | 'loading' | 'success' | 'error'
@@ -34,6 +34,10 @@ export default defineComponent({
     uploadCheck: {
       type: Function as PropType<UploadCheckFunc>,
       required: true
+    },
+    editImg: {
+      type: String,
+      required: true
     }
   },
   setup(props, context) {
@@ -41,6 +45,13 @@ export default defineComponent({
     const inputRef = ref<null | HTMLElement>(null)
     const status = ref<StatusProps>('ready')
     const imgUrl = ref('')
+
+    // 监听editImg的变化
+    watch(() => props.editImg, (newVal) => {
+      status.value = "success"
+      imgUrl.value = newVal
+    })
+    
     const triggerUpload = () => {
       if(inputRef.value) {
         inputRef.value.click()

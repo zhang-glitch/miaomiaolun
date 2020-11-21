@@ -223,7 +223,7 @@ const actions = {
   //获取用户信息
   async getUser(context: ActionContext<StateProps, StateProps>) {
     const { data } = await axios.get("/user/current");
-    // console.log(data);
+    console.log(data);
     context.commit("getUser", data);
   },
 

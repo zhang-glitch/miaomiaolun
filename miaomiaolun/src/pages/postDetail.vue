@@ -34,6 +34,11 @@
               <p v-html="contentHTML"></p>
             </div>
           </div>
+          <div class="edit-del" v-show="isOperate">
+            <router-link :to="{name: 'create', query: {id: postDetailVal._id}}" 
+            class="btn btn-primary edit-btn">编辑</router-link>
+            <button class="btn btn-danger" @click="delPost">删除</button>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +51,9 @@ import {useStore} from 'vuex'
 import { StateProps } from '../store';
 import {useRoute} from 'vue-router'
 import MarkDownIt from 'markdown-it'
+import axios from 'axios'
+import CreateMessage from '../components/CreateMessage';
+import router from '../route';
 
 export default defineComponent({
   name: 'postDetail',
@@ -75,10 +83,35 @@ export default defineComponent({
         return require('../assets/avatar.jpg')
       }
     })
+
+    const isOperate = computed(() => {
+      if(postDetailVal.value && postDetailVal.value.author) {
+        return postDetailVal.value.author._id === store.state.user._id
+      }
+    })
+
+
+    // 删除文章
+    const delPost = () => {
+      const {column} = store.state.user
+     if(column) {
+        axios.delete(`/posts/${id}`).then((res) => {
+        console.log(res)
+        CreateMessage("删除文章成功, 即将跳转到个人专栏", "success")
+        setTimeout(() => {
+          router.push(`/column/${column}`)
+        }, 2000)
+      }).catch(() => {
+        CreateMessage("删除文章失败", "danger")
+      })
+     }
+    }
     return {
       postDetailVal,
       userAvatar,
-      contentHTML
+      contentHTML,
+      isOperate,
+      delPost
     }
   }
 })
@@ -115,12 +148,20 @@ export default defineComponent({
   }
 
   .detail-box {
-    margin-bottom: 100px;
+    margin-bottom: 20px;
   }
 
   .bg-img img {
     height: 400px;
     width: 100%;
+  }
+
+  .edit-btn {
+    margin-right: 10px;
+  }
+
+  .edit-del {
+    margin-bottom: 100px;
   }
 
 </style>
