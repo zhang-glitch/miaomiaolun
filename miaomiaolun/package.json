@@ -11,7 +11,7 @@
     "@types/markdown-it": "^10.0.3",
     "axios": "^0.21.0",
     "bootstrap": "^5.0.0-alpha2",
-    "markdown-it": "^12.0.2",
+    "markdown-it": "^12.3.2",
     "mitt": "^2.1.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-rc.3",
